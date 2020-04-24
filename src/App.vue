@@ -3,7 +3,7 @@
         <nav class="navbar is-white topNav">
             <div class="container">
             <div class="navbar-brand">
-                <h1>Activity Planner</h1>
+                <h1> {{ fullAppName }} </h1>
             </div>
             </div>
         </nav>
@@ -26,7 +26,7 @@
                   <h2>Create Activity</h2>
                   <form>
                     <div class="field">
-                      <lable class="label">Title</lable>
+                      <label class="label">Title</label>
                       <div class="control">
                         <input class="input" type="text" placeholder="Read a Book" v-model="newActivity.title">
                       </div>
@@ -39,7 +39,7 @@
                     </div>
                     <div class="field is-grouped">
                       <div class="control">
-                        <button class="button is-link" @click="createActivity">Create Activity</button>
+                        <button class="button is-link" @click="createActivity" :disabled="!checkActivity">Create Activity</button>
                       </div>
                       <div class="control">
                         <button class="button is-text" @click="toggleFormDisplay">Cancel</button>
@@ -60,6 +60,7 @@
 
 <script>
 import activity from "./components/activity"
+import { fetchActivities, fetchUser, fetechCategories } from "./api"
 
 export default {
   name: 'app',
@@ -70,51 +71,46 @@ export default {
       isFormDisplayed: false,
       message: 'Hello Vue!',
       titleMessage: 'Title Message Vue!!!!!',
-      isTextDisplayed: true,
       newActivity: {
         title: "",
         notes: "",
       },
-      user: {
-        name: 'Filip Jerga',
-        id: '-Aj34jknvncx98812',
-      },
-      activities: {
-        '1546968934': {
-          id: '1546968934',
-          title: 'Learn Vue.js',
-          notes: 'I started today and it was not good.',
-          progress: 0,
-          category: '1546969049',
-          createdAt: 1546969144391,
-          updatedAt: 1546969144391
-        },
-        '1546969212': {
-          id: '1546969212',
-          title: 'Read Witcher Books',
-          notes: 'These books are super nice',
-          progress: 0,
-          category: '1546969049',
-          createdAt: 1546969144391,
-          updatedAt: 1546969144391
-        }
-      },
-      categories: {
-        '1546969049': {text: 'books'},
-        '1546969225': {text: 'movies'}
-      }
+      user: {},
+      activities: {},
+      categories: {},
+      appName: 'Activity Planner',
+      creator: "Anand Kumar",
     }
   },
-  methods: {
-    toggleTextDisplay () {
-      this.isTextDisplayed = !this.isTextDisplayed
+  // watch: {
+  //   created ()
+  //   {
+
+  //   },
+  // },
+  computed: {
+    checkActivity ()
+    {
+      return this.newActivity.title && this.newActivity.notes
     },
+    fullAppName ()
+    {
+      return this.appName + ' by ' + this.creator
+    }
+  },
+  created ()
+  {
+    this.activities = fetchActivities()
+    this.user = fetchUser()
+    this.categories = fetechCategories()
+  },
+  methods: {
     toggleFormDisplay () {
       this.isFormDisplayed = !this.isFormDisplayed
     },
     createActivity () {
       console.log(this.newActivity)
-    }
+    },
   }
 }
 </script>
