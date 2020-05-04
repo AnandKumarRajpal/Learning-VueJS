@@ -1,24 +1,13 @@
+
+import fakeAPI from "@/lib/fakeAPI"
+
 export const fetchActivities = function() {
-    return {
-        '1546968934': {
-            id: '1546968934',
-            title: 'Learn Vue.js',
-            notes: 'I started today and it was not good.',
-            progress: 0,
-            category: '1546969049',
-            createdAt: 1546969144391,
-            updatedAt: 1546969144391
-        },
-        '1546969212': {
-            id: '1546969212',
-            title: 'Read Witcher Books',
-            notes: 'These books are super nice',
-            progress: 0,
-            category: '1546969049',
-            createdAt: 1546969144391,
-            updatedAt: 1546969144391
-        }
-    }
+    return fakeAPI.get('activities')
+}
+
+export const fetechCategories = function () 
+{
+    return fakeAPI.get('categories')
 }
 
 export const fetchUser = function ()
@@ -29,10 +18,22 @@ export const fetchUser = function ()
     }
 }
 
-export const fetechCategories = function () 
+export const generateUID = function()
 {
-    return {
-        '1546969049': {text: 'books'},
-        '1546969225': {text: 'movies'}
-    }
+    return Math.floor(new Date() * Math.random())
 }
+
+export const createActivityAPI = function (activity)
+{
+    activity.id = generateUID()
+    activity.progress = 0
+    activity.createdAt = new Date()
+    activity.updatedAt = new Date()
+    return fakeAPI.post('activities', activity)   
+}
+
+export const deleteActivityAPI = function (activity)
+{
+    return fakeAPI.delete('activities', activity)
+}
+
